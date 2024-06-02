@@ -1,0 +1,15 @@
+stages:
+  - build
+  - run
+
+build:
+  stage: build
+  script:
+    - pip3 install -r requirements.txt
+    - echo "Build stage completed successfully"
+
+run:
+  stage: run
+  script:
+    - python3 app.py
+    - echo "Run stage completed successfully"
