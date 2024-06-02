@@ -1,0 +1,9 @@
+ips:
+  - ip: 192.168.68.2
+    community_string: "read"
+  - ip: 192.168.68.3
+    community_string: "read"
+  - ip: 192.168.68.5
+    community_string: "read"
+  - ip: 192.168.68.6
+    community_string: "read"
