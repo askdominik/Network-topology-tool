@@ -38,6 +38,7 @@ eventSource.onmessage = function (event) {
 function updateGraph(graphData) {
   console.log("Graph data received:", graphData);
 
+  // Update links
   link = link.data(graphData.links, function (d) { return d.source.id + "-" + d.target.id; });
   link.exit().remove();
   var newLink = link.enter().append("g")
@@ -49,11 +50,13 @@ function updateGraph(graphData) {
     .attr("stroke-width", 2);
   link = link.merge(newLink);
 
+  // Save the node positions
   var nodePositions = new Map();
   node.each(function (d) {
     nodePositions.set(d.id, { x: d.x, y: d.y });
   });
 
+  // Update nodes
   node = node.data(graphData.nodes, d => d.id);
   node.exit().remove();
   var newNode = node.enter().append("g")
@@ -75,11 +78,13 @@ function updateGraph(graphData) {
   newNode.on("dblclick", showInfoPopup);
   node = node.merge(newNode);
 
-  node.selectAll(".primary-image")
+  // Update images for existing and new nodes
+  node.select(".primary-image")
     .attr("xlink:href", d => selectImage(identifyDeviceType(d.SysDesc)) + "?_=" + new Date().getTime());
-  node.selectAll(".status-image")
+  node.select(".status-image")
     .attr("xlink:href", d => (d.status === "up" ? "static/images/checkmark.png" : "static/images/redmark.png") + "?_=" + new Date().getTime());
 
+  // Restore node positions
   node.each(function (d) {
     if (nodePositions.has(d.id)) {
       var pos = nodePositions.get(d.id);
@@ -103,6 +108,13 @@ function updateGraph(graphData) {
     .attr("dy", 10)
     .text(d => d.id);
   label = label.merge(newLabel);
+
+    // Ensure both texts are updated for all nodes
+  label.select(".label-SysName")
+    .text(d => d.SysName);
+  label.select(".label-id")
+    .text(d => d.id);
+
 
   simulation.nodes(graphData.nodes)
     .on("tick", ticked);

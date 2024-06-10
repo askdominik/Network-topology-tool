@@ -75,8 +75,6 @@ pdf_btn.onclick = () => {
     toPDF(all_devices);
 }
 
-// 4. Converting HTML table to JSON
-
 const json_btn = document.querySelector('#toJSON');
 
 const toJSON = function (table) {
@@ -139,7 +137,7 @@ const excel_btn = document.querySelector('#toEXCEL');
 const toExcel = function (table) {
     const wb = XLSX.utils.book_new();
     const ws_data = [];
-    
+
     const t_heads = table.querySelectorAll('th');
     const headers = [...t_heads].map(head => {
         let actual_head = head.textContent.trim().split(' ');
@@ -182,14 +180,14 @@ const downloadFile = function (data, fileType, fileName = '') {
 
 document.addEventListener('DOMContentLoaded', () => {
     const devicesTbody = document.getElementById('devices_tbody');
-    
+
     const eventSource = new EventSource('/devices-stream');
-    
-    eventSource.onmessage = function(event) {
+
+    eventSource.onmessage = function (event) {
         const devices = JSON.parse(event.data);
         console.log(devices)
         devicesTbody.innerHTML = '';
-        
+
         devices.nodes.forEach(device => {
             const row = document.createElement('tr');
 
@@ -204,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${device.SysDesc}</td>
                 <td>${device.SysName}</td>
             `;
-            
+
             devicesTbody.appendChild(row);
         });
     };
